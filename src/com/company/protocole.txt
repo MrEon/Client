@@ -1,0 +1,152 @@
+man add:
+NAME
+	ADD
+SYNOPSYS
+	ADD <etudiant><mail><description><technologies>
+DESCRIPTION
+	Permet d'ajouter une nouvelle idée avec la description textuelle de l'idée, les technologies envisagées, le nom de l'étudiant qui soumet l'idée et son adresse mail.
+	Chaque argument doit être non vide et placé entre dans une balise délimitée par <>.
+	etudiant: nom de l'étudiant qui propose l'idée. Ne comprend que des lettres, des traits d'union et des espaces.
+	mail: adresse mail de l'étudiant. Doit être conforme à la définition d'une adresse mail.
+	description: description de l'idée soumise. Peut comporter tous types de caractères.
+	technologies: technologies envisagées. Peut comporter tous types de caractères. Chaque technologie est séparée par une virgule.
+	Le serveur crée une clé alphanumérique unique associée à l'idée à ajouter, de manière à pouvoir accéder à l'idée sans ambiguité.
+RETOUR
+	En cas de réussite, le format de retour du serveur est le suivant:
+	ADD OK
+	Erreurs possibles:
+	ADD ERR ETUDIANT: nom invalide
+	ADD ERR MAIL: mail invalide
+	ADD ERR VOID_ARG argument1: l'argument "argument1" est vide
+	ADD ERR MISSING_ARG: il manque une des 4 balises
+	ADD ERR TOO_MANY_ARGS: il y a des balises en trop.
+
+EXEMPLE
+	Requête:
+	ADD <Rémy Kaloustian><remykaloustian@bg.fr><Lorem ipsum><XML>
+	Réponse:
+	ADD OK
+
+	Requête:
+	ADD <Rémy Kaloustian><remykaloustian@bg.fr><Lorem ipsum><>
+	Réponse:
+	ADD ERR VOID_ARG technologies
+
+
+
+
+man ideas:
+NAME
+	IDEAS
+SYNOPSYS
+	IDEAS
+DESCRIPTION
+	Permet de lister l’ensemble des idées soumises.
+OPTION 
+	Preciser une ID, affin de n'afficher qu'une idée précise
+RETOUR
+	En cas de réussite, le format de retour du serveur est le suivant:
+
+	IDEAS 
+	[<clé_unique><etudiant><mail><description><technologies>]
+	...
+	OK
+
+	Les informations relatives à l'idée sont retournées au client. La clé unique générée est transmise également pour que le client puisse accéder à l'idée.
+
+	Erreurs possibles:
+	IDEAS EMPTY_LIST: aucune idée n'a encore été soumise.
+
+EXEMPLE
+	Requête:
+	IDEAS
+	Réponse:
+	IDEAS 
+	[<Paul Franchi><pfz@polytech.fr><Faire un beau site internet><HTML>]
+	[<Rémy Kaloustian><remykaloustian@bg.fr><Lorem ipsum><XML>]
+	OK
+
+	Requête:
+	IDEAS
+	Réponse:
+	IDEAS EMPTY_LIST
+
+
+
+man participate:
+NAME
+	PARTICIPATE
+SYNOPSYS
+	PARTICIPATE <clé><etudiant><mail>
+DESCRIPTION
+	Permet de participer à une idée à partir de son identifiant unique en donnant son email.
+	clé: clé unique associée à une idée.
+	etudiant: Nom et prenom de l'etudiant
+	mail: adresse mail de l'étudiant qui veut participer.
+RETOUR
+	En cas de réussite, le format de retour du serveur est le suivant:
+	PARTICIPATE OK
+
+	Erreurs possibles:
+	PARTICIPATE ERR INVALID_ID: la clé entrée ne correspond à aucune idée enregistrée.
+	PARTICIPATE ERR INVALID_MAIL: l'adresse mail ne correspond à aucun étudiant.
+	PARTICIPATE ERR DUPLICATE: l'étudiant participe déja à l'idée.
+
+EXEMPLE
+	Requête:
+	PARTICIPATE <45><Pierre Dupont><pierre.dupont@polytech.fr>
+	Réponse:
+	PARTICIPATE OK
+
+	Requête:
+	PARTICIPATE <999999><Pierre Dupont><pierre.dupont@polytech.fr>
+	Réponse:
+	PARTICIPATE ERR INVALID_ID
+
+
+
+man students:
+NAME
+	STUDENTS
+SYNOPSYS
+	STUDENTS <clé>
+
+DESCRIPTION
+	Permet de lister les étudiants intéressés par une idée donnée.
+	clé: clé unique associée à une idée.
+
+RETOUR
+	En cas de réussite, le format de retour du serveur est le suivant:
+	STUDENTS <id>
+	Etudiant <mail>
+	Etudiant <mail>
+	...
+	OK
+
+	Erreurs possibles:
+	STUDENTS EMPTY_LIST: Aucun étudiant n'est interessé par l'idée
+	STUDENTS ERR INVALID_ID: la clé entrée ne correspond à aucune idée enregistrée.
+	
+
+EXAMPLE
+	Requete:
+	STUDENTS <45>
+
+	Réponse:
+	STUDENTS
+	Pierre Dupont <pierre.dupont@polytech.fr>
+	Sylvain Durif <sylvain.durif@polytech.fr>
+	OK
+
+
+	Requete:
+	STUDENTS <1>
+
+	Réponse:
+	STUDENTS EMPTY_LIST
+
+man QUIT:
+Pour quitter le serveur
+
+
+	
