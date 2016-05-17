@@ -28,7 +28,7 @@ public class Client {
             String fromUser;
 
             while ((fromServer = in.readLine()) != null) {
-                fromServer = fromServer.replace("|", "\n");
+                fromServer = fromServer.replace("|", System.lineSeparator());
                 System.out.println("Server: " + fromServer);
                 if (fromServer.equals("Bye!"))
                     break;
